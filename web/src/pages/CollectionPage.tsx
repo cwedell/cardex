@@ -3,33 +3,71 @@ import { Search } from 'lucide-react'
 import { CarDataContext } from '../context/CarDataContext'
 import { getSpots, getSpottedLabels } from '../lib/storage'
 import { RarityBadge } from '../components/RarityBadge'
-import { RARITY_ORDER, RARITY_LABEL, RARITY_DOT } from '../lib/rarity'
+import { RARITY_ORDER, RARITY_LABEL } from '../lib/rarity'
 import type { RarityTier } from '../types'
 
+const RARITY_COLORS: Record<RarityTier, string> = {
+  common:    '#6b7280',
+  uncommon:  '#22c55e',
+  rare:      '#3b82f6',
+  epic:      '#a855f7',
+  legendary: '#f59e0b',
+}
+
 type Filter = 'all' | RarityTier | 'spotted' | 'unspotted'
+
+function CarSilhouette() {
+  return (
+    <svg viewBox="0 0 120 60" width="100%" height="100%" fill="none">
+      <path d="M10 40 Q15 30 30 26 L45 18 Q55 14 70 14 L90 16 Q102 18 108 26 L112 40 Z" fill="#dfd7c4" />
+      <ellipse cx="30" cy="40" rx="10" ry="10" fill="#c8bfad" />
+      <ellipse cx="90" cy="40" rx="10" ry="10" fill="#c8bfad" />
+      <path d="M40 26 L55 16 L80 16 L92 26 Z" fill="#c8bfad" opacity="0.4" />
+    </svg>
+  )
+}
 
 function CarCard({ label, rarity, photoDataUrl, spotted }: {
   label: string; rarity: RarityTier; photoDataUrl?: string; spotted: boolean
 }) {
   return (
-    <div className={`rounded-xl border overflow-hidden transition-opacity
-      ${spotted ? 'border-zinc-700 bg-zinc-900' : 'border-zinc-800 bg-zinc-950 opacity-60'}`}>
-      <div className="aspect-video w-full bg-zinc-800 relative">
+    <div className={`border overflow-hidden transition-opacity
+      ${spotted ? 'border-rally-rule bg-rally-paper' : 'border-rally-rule bg-rally-paper opacity-60'}`}>
+      <div className="w-full bg-rally-paper2 relative" style={{ height: 110 }}>
         {spotted && photoDataUrl ? (
           <img src={photoDataUrl} alt={label} className="w-full h-full object-cover" />
         ) : (
-          <div className="w-full h-full flex items-center justify-center">
-            <svg viewBox="0 0 64 40" className="w-16 opacity-20 fill-zinc-400">
-              <path d="M10 28 L6 28 C4 28 2 26 2 24 L2 18 C2 16 3 14 5 13 L12 11 L20 6 C22 5 24 4 26 4 L42 4 C44 4 46 5 48 6 L56 11 L61 13 C63 14 64 16 64 18 L64 24 C64 26 62 28 60 28 L54 28 C53 32 50 36 46 36 C42 36 39 32 38 28 L26 28 C25 32 22 36 18 36 C14 36 11 32 10 28Z" />
-            </svg>
+          <div className="w-full h-full flex items-center justify-center p-2">
+            <CarSilhouette />
           </div>
         )}
       </div>
-      <div className="p-2.5">
-        <p className="text-xs font-medium leading-tight mb-1 line-clamp-2">{label}</p>
+      <div className="p-[10px_12px_12px]">
+        <p className="font-serif italic text-[12px] leading-tight mb-1.5 text-rally-dark"
+           style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+          {label}
+        </p>
         <RarityBadge tier={rarity} size="sm" />
       </div>
     </div>
+  )
+}
+
+function FilterPill({ label, active, dot, onClick }: {
+  label: string; active?: boolean; dot?: string; onClick: () => void
+}) {
+  return (
+    <button
+      onClick={onClick}
+      className={`inline-flex items-center gap-1.5 px-3 py-1.5 font-display font-bold text-[10px] tracking-[1.5px] uppercase border transition-colors
+        ${active
+          ? 'bg-rally-dark border-rally-dark text-rally-cream'
+          : 'bg-rally-paper border-rally-rule text-rally-muted hover:border-rally-muted'
+        }`}
+    >
+      {dot && <span className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ backgroundColor: dot }} />}
+      {label}
+    </button>
   )
 }
 
@@ -38,10 +76,9 @@ export function CollectionPage() {
   const [query, setQuery]   = useState('')
   const [filter, setFilter] = useState<Filter>('all')
 
-  const spots        = getSpots()
+  const spots         = getSpots()
   const spottedLabels = useMemo(() => getSpottedLabels(), [spots.length])
 
-  // Most recent photo per label
   const photoByLabel = useMemo(() => {
     const m = new Map<string, string>()
     for (const s of [...spots].reverse()) {
@@ -67,50 +104,55 @@ export function CollectionPage() {
   const spottedCount = spottedLabels.size
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-1">Collection</h1>
-      <p className="text-zinc-400 text-sm mb-5">
-        {spottedCount} of {carData.length} spotted
-      </p>
+    <div className="max-w-[900px] mx-auto px-12 py-9 font-serif text-rally-dark">
+      {/* Header */}
+      <div className="flex items-end justify-between mb-[22px] pb-[18px] border-b border-rally-rule">
+        <div>
+          <p className="font-display font-bold text-[10px] tracking-[4px] text-rally-muted uppercase mb-[5px]">Your Garage</p>
+          <h1 className="font-serif font-normal italic text-[32px]">Collection</h1>
+        </div>
+        <div className="text-right">
+          <p className="font-display font-black text-[11px] tracking-[3px] text-rally-muted uppercase">Cars Spotted</p>
+          <p className="font-display font-black text-[40px] text-rally-red leading-none" style={{ letterSpacing: '-1px' }}>
+            {spottedCount}{' '}
+            <span className="text-[18px] text-rally-muted font-normal" style={{ letterSpacing: 0 }}>/{carData.length}</span>
+          </p>
+        </div>
+      </div>
 
       {/* Search */}
       <div className="relative mb-4">
-        <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-500" />
+        <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-rally-muted" />
         <input
           type="text"
           placeholder="Search cars…"
           value={query}
           onChange={e => setQuery(e.target.value)}
-          className="w-full pl-9 pr-4 py-2.5 rounded-xl bg-zinc-900 border border-zinc-700
-                     text-sm placeholder-zinc-500 focus:outline-none focus:border-blue-500 transition-colors"
+          className="w-full pl-9 pr-4 py-2.5 bg-rally-paper border border-rally-rule
+                     font-serif italic text-[13px] text-rally-dark placeholder-rally-muted
+                     focus:outline-none focus:border-rally-red transition-colors"
         />
       </div>
 
       {/* Filter pills */}
-      <div className="flex gap-2 flex-wrap mb-5">
-        {(['all', 'spotted', 'unspotted', ...RARITY_ORDER] as Filter[]).map(f => {
-          const isRarity = RARITY_ORDER.includes(f as RarityTier)
-          return (
-            <button
-              key={f}
-              onClick={() => setFilter(f)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold
-                border transition-colors
-                ${filter === f
-                  ? 'bg-blue-600 border-blue-500 text-white'
-                  : 'bg-zinc-900 border-zinc-700 text-zinc-400 hover:border-zinc-500'
-                }`}
-            >
-              {isRarity && (
-                <span className={`w-1.5 h-1.5 rounded-full ${RARITY_DOT[f as RarityTier]}`} />
-              )}
-              {f === 'all' ? 'All' : f === 'spotted' ? 'Spotted' : f === 'unspotted' ? 'Unspotted' : RARITY_LABEL[f as RarityTier]}
-            </button>
-          )
-        })}
+      <div className="flex flex-wrap gap-1.5 mb-4">
+        <FilterPill label="All"       active={filter === 'all'}       onClick={() => setFilter('all')} />
+        <FilterPill label="Spotted"   active={filter === 'spotted'}   onClick={() => setFilter('spotted')} />
+        <FilterPill label="Unspotted" active={filter === 'unspotted'} onClick={() => setFilter('unspotted')} />
+        {RARITY_ORDER.map(tier => (
+          <FilterPill
+            key={tier}
+            label={RARITY_LABEL[tier]}
+            active={filter === tier}
+            dot={RARITY_COLORS[tier]}
+            onClick={() => setFilter(tier)}
+          />
+        ))}
       </div>
 
-      <p className="text-xs text-zinc-600 mb-4">Showing {filtered.length} cars</p>
+      <p className="font-display text-[9px] tracking-[2px] text-rally-muted uppercase mb-3.5">
+        Showing {filtered.length} cars
+      </p>
 
       {/* Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
@@ -124,7 +166,9 @@ export function CollectionPage() {
           />
         ))}
         {filtered.length === 0 && (
-          <p className="col-span-full text-center text-zinc-500 py-16">No cars match your search.</p>
+          <p className="col-span-full text-center font-serif italic text-rally-muted py-16">
+            No cars match your search.
+          </p>
         )}
       </div>
     </div>

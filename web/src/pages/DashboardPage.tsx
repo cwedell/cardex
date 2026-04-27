@@ -1,18 +1,26 @@
 import { useContext, useMemo } from 'react'
 import { Link } from 'react-router-dom'
-import { Camera, ChevronRight } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 import { getSpots, getUser } from '../lib/storage'
 import { getOrInitChallenges } from '../lib/challenges'
-import { RARITY_ORDER, RARITY_LABEL, RARITY_COLOR, RARITY_DOT } from '../lib/rarity'
+import { RARITY_ORDER, RARITY_LABEL } from '../lib/rarity'
 import { RarityBadge } from '../components/RarityBadge'
 import { CarDataContext } from '../context/CarDataContext'
 import type { RarityTier } from '../types'
 
-function StatCard({ label, value }: { label: string; value: string | number }) {
+const RARITY_COLORS: Record<RarityTier, string> = {
+  common:    '#6b7280',
+  uncommon:  '#22c55e',
+  rare:      '#3b82f6',
+  epic:      '#a855f7',
+  legendary: '#f59e0b',
+}
+
+function SectionLabel({ children, action }: { children: React.ReactNode; action?: React.ReactNode }) {
   return (
-    <div className="bg-zinc-900 border border-zinc-800 rounded-xl p-4 flex flex-col gap-1">
-      <span className="text-zinc-400 text-xs uppercase tracking-wide">{label}</span>
-      <span className="text-2xl font-bold">{value}</span>
+    <div className="flex justify-between items-center font-display font-bold text-[9px] tracking-[4px] text-rally-muted uppercase border-b border-rally-rule pb-[7px] mb-4">
+      <span>{children}</span>
+      {action && <span className="text-rally-red">{action}</span>}
     </div>
   )
 }
@@ -24,6 +32,7 @@ function ChallengeCard({
   target,
   points,
   completedAt,
+  accentColor,
 }: {
   title: string
   description: string
@@ -31,35 +40,36 @@ function ChallengeCard({
   target: number
   points: number
   completedAt: string | null
+  accentColor: string
 }) {
-  const pct = Math.min(100, Math.round((progress / target) * 100))
+  const pct  = Math.min(100, Math.round((progress / target) * 100))
   const done = completedAt !== null
 
   return (
-    <div className={`rounded-xl border p-4 ${done ? 'border-emerald-800 bg-emerald-950/30' : 'border-zinc-800 bg-zinc-900'}`}>
-      <div className="flex items-center justify-between mb-1">
-        <span className="text-xs text-zinc-500 uppercase tracking-wide font-semibold">{title}</span>
-        <span className={`text-xs font-semibold ${done ? 'text-emerald-400' : 'text-blue-400'}`}>
+    <div
+      className="bg-rally-paper border border-rally-rule p-[14px_18px]"
+      style={{ borderTop: `3px solid ${accentColor}` }}
+    >
+      <div className="flex justify-between items-center mb-2">
+        <span className="font-display font-bold text-[9px] tracking-[3px] text-rally-muted uppercase">{title}</span>
+        <span className={`font-display font-bold text-[10px] ${done ? 'text-rally-gold' : 'text-rally-gold'}`}>
           {done ? '✓ Complete' : `+${points} pts`}
         </span>
       </div>
-      <p className="text-sm font-medium mb-3">{description}</p>
-      <div className="w-full bg-zinc-800 rounded-full h-1.5">
-        <div
-          className={`h-1.5 rounded-full transition-all ${done ? 'bg-emerald-500' : 'bg-blue-500'}`}
-          style={{ width: `${pct}%` }}
-        />
+      <p className="font-serif italic text-sm mb-3">{description}</p>
+      <div className="h-[3px] bg-rally-paper2">
+        <div className="h-full transition-all" style={{ width: `${pct}%`, backgroundColor: accentColor }} />
       </div>
-      <p className="text-xs text-zinc-500 mt-1">{progress} / {target}</p>
+      <p className="font-display text-[9px] text-rally-muted tracking-[1px] mt-1.5">{progress} / {target}</p>
     </div>
   )
 }
 
 export function DashboardPage() {
   const { carData } = useContext(CarDataContext)
-  const user       = getUser()
-  const spots      = getSpots()
-  const challenges = getOrInitChallenges()
+  const user        = getUser()
+  const spots       = getSpots()
+  const challenges  = getOrInitChallenges()
 
   const spottedLabels = useMemo(() => new Set(spots.map(s => s.label)), [spots])
   const totalCars     = carData.length
@@ -85,97 +95,124 @@ export function DashboardPage() {
     return sum + (pts[s.rarityTier] ?? 10)
   }, 0)
 
+  const stats = [
+    { label: 'Total Spots', value: spots.length },
+    { label: 'Unique Cars', value: spottedLabels.size },
+    { label: 'Points',      value: totalPts.toLocaleString() },
+  ]
+
   return (
-    <div className="max-w-2xl mx-auto px-4 py-8 space-y-8">
-      {/* Greeting */}
-      <div>
-        <h1 className="text-2xl font-bold">Welcome back, {user.name} 👋</h1>
-        <p className="text-zinc-400 text-sm mt-1">
-          {spottedLabels.size} of {totalCars} cars spotted
-        </p>
+    <div className="max-w-[900px] mx-auto px-12 py-9 font-serif text-rally-dark">
+      {/* Header */}
+      <div className="flex items-end justify-between mb-7 pb-[22px] border-b border-rally-rule">
+        <div>
+          <p className="font-display font-bold text-[10px] tracking-[4px] text-rally-muted uppercase mb-1.5">Driver Dashboard</p>
+          <h1 className="text-[36px] font-serif font-normal italic leading-tight">
+            Welcome back,<br />
+            <span
+              className="not-italic font-display font-black text-[40px] text-rally-red uppercase"
+              style={{ letterSpacing: '-1px' }}
+            >
+              {user.name}
+            </span>
+          </h1>
+        </div>
+        <div className="text-right">
+          <p className="font-display font-black text-[64px] text-rally-dark leading-none" style={{ letterSpacing: '-2px' }}>
+            {spottedLabels.size}
+          </p>
+          <p className="font-display font-bold text-[9px] text-rally-muted tracking-[2px] uppercase">
+            of {totalCars} spotted
+          </p>
+        </div>
       </div>
 
-      {/* Stats row */}
-      <div className="grid grid-cols-3 gap-3">
-        <StatCard label="Total Spots" value={spots.length} />
-        <StatCard label="Unique Cars" value={spottedLabels.size} />
-        <StatCard label="Points"      value={totalPts.toLocaleString()} />
+      {/* Stats grid */}
+      <div className="grid grid-cols-3 border border-b-0 border-rally-rule mb-7">
+        {stats.map(({ label, value }, i) => (
+          <div
+            key={label}
+            className={`p-[14px_20px] border-b border-rally-rule ${i < stats.length - 1 ? 'border-r border-rally-rule' : ''}`}
+          >
+            <p className="font-display font-bold text-[9px] tracking-[3px] text-rally-muted uppercase mb-1.5">{label}</p>
+            <p className="font-display font-black text-[44px] text-rally-red leading-none" style={{ letterSpacing: '-1px' }}>{value}</p>
+          </div>
+        ))}
       </div>
 
-      {/* Progress by tier */}
-      <section>
-        <h2 className="text-sm font-semibold text-zinc-400 uppercase tracking-wide mb-3">Collection Progress</h2>
-        <div className="space-y-2">
+      {/* Collection Progress */}
+      <div className="bg-rally-paper border border-rally-rule p-[20px_24px] mb-7">
+        <SectionLabel>Collection Progress</SectionLabel>
+        <div className="space-y-2.5">
           {RARITY_ORDER.map(tier => {
             const { spotted, total } = tierCounts[tier]
             const pct = total > 0 ? Math.round((spotted / total) * 100) : 0
             return (
               <div key={tier} className="flex items-center gap-3">
-                <span className={`w-2 h-2 rounded-full flex-shrink-0 ${RARITY_DOT[tier]}`} />
-                <span className={`text-sm w-20 ${RARITY_COLOR[tier]}`}>{RARITY_LABEL[tier]}</span>
-                <div className="flex-1 bg-zinc-800 rounded-full h-1.5">
+                <span
+                  className="w-2 h-2 rounded-full flex-shrink-0"
+                  style={{ backgroundColor: RARITY_COLORS[tier] }}
+                />
+                <span className="font-serif italic text-[13px] w-20">{RARITY_LABEL[tier]}</span>
+                <div className="flex-1 h-[3px] bg-rally-paper2">
                   <div
-                    className={`h-1.5 rounded-full transition-all`}
-                    style={{ width: `${pct}%`, backgroundColor: getComputedColor(tier) }}
+                    className="h-full"
+                    style={{ width: `${pct}%`, backgroundColor: RARITY_COLORS[tier] }}
                   />
                 </div>
-                <span className="text-xs text-zinc-500 w-16 text-right">{spotted}/{total}</span>
+                <span className="font-display font-bold text-[10px] text-rally-muted text-right" style={{ minWidth: 44 }}>
+                  {spotted}/{total}
+                </span>
               </div>
             )
           })}
         </div>
-      </section>
+      </div>
 
-      {/* Daily & Weekly challenges */}
-      <section>
-        <div className="flex items-center justify-between mb-3">
-          <h2 className="text-sm font-semibold text-zinc-400 uppercase tracking-wide">Challenges</h2>
-          <Link to="/challenges" className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-0.5">
-            View all <ChevronRight size={12} />
-          </Link>
-        </div>
-        <div className="grid sm:grid-cols-2 gap-3">
-          <ChallengeCard
-            title="Daily"
-            description={challenges.daily.description}
-            progress={challenges.daily.progress}
-            target={typeof challenges.daily.target === 'number' ? challenges.daily.target : 1}
-            points={challenges.daily.points}
-            completedAt={challenges.daily.completedAt}
-          />
-          <ChallengeCard
-            title="Weekly"
-            description={challenges.weekly.description}
-            progress={challenges.weekly.progress}
-            target={typeof challenges.weekly.target === 'number' ? challenges.weekly.target : 1}
-            points={challenges.weekly.points}
-            completedAt={challenges.weekly.completedAt}
-          />
-        </div>
-      </section>
+      {/* Challenges */}
+      <SectionLabel action={<Link to="/challenges" className="flex items-center gap-0.5">View All <ChevronRight size={10} /></Link>}>
+        Challenges
+      </SectionLabel>
+      <div className="grid sm:grid-cols-2 gap-3.5 mb-7">
+        <ChallengeCard
+          title="Daily"
+          description={challenges.daily.description}
+          progress={challenges.daily.progress}
+          target={typeof challenges.daily.target === 'number' ? challenges.daily.target : 1}
+          points={challenges.daily.points}
+          completedAt={challenges.daily.completedAt}
+          accentColor="#c0200f"
+        />
+        <ChallengeCard
+          title="Weekly"
+          description={challenges.weekly.description}
+          progress={challenges.weekly.progress}
+          target={typeof challenges.weekly.target === 'number' ? challenges.weekly.target : 1}
+          points={challenges.weekly.points}
+          completedAt={challenges.weekly.completedAt}
+          accentColor="#b8873f"
+        />
+      </div>
 
       {/* Recent spots */}
       {recentSpots.length > 0 && (
-        <section>
-          <div className="flex items-center justify-between mb-3">
-            <h2 className="text-sm font-semibold text-zinc-400 uppercase tracking-wide">Recent Spots</h2>
-            <Link to="/profile" className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-0.5">
-              Full history <ChevronRight size={12} />
-            </Link>
-          </div>
+        <section className="mb-7">
+          <SectionLabel action={<Link to="/profile" className="flex items-center gap-0.5">Full History <ChevronRight size={10} /></Link>}>
+            Recent Spots
+          </SectionLabel>
           <div className="space-y-2">
             {recentSpots.map(spot => (
-              <div key={spot.id} className="flex items-center gap-3 bg-zinc-900 border border-zinc-800 rounded-xl p-3">
+              <div key={spot.id} className="flex items-center gap-3 bg-rally-paper border border-rally-rule p-3">
                 <img
                   src={spot.photoDataUrl}
                   alt={spot.label}
-                  className="w-14 h-14 rounded-lg object-cover flex-shrink-0"
+                  className="w-14 h-14 object-cover flex-shrink-0"
                 />
                 <div className="min-w-0 flex-1">
-                  <p className="font-medium text-sm truncate">{spot.label}</p>
+                  <p className="font-serif italic text-sm truncate">{spot.label}</p>
                   <RarityBadge tier={spot.rarityTier} size="sm" />
                 </div>
-                <span className="text-xs text-zinc-600 flex-shrink-0">
+                <span className="font-display text-[9px] text-rally-muted flex-shrink-0 tracking-[1px]">
                   {new Date(spot.timestamp).toLocaleDateString()}
                 </span>
               </div>
@@ -187,23 +224,12 @@ export function DashboardPage() {
       {/* CTA */}
       <Link
         to="/spot"
-        className="flex items-center justify-center gap-2 w-full py-4 rounded-2xl
-                   bg-blue-600 hover:bg-blue-500 text-white font-semibold text-lg
-                   transition-colors shadow-lg shadow-blue-900/30"
+        className="flex items-center justify-center w-full py-[15px] bg-rally-red text-rally-cream
+                   font-display font-black text-[11px] tracking-[5px] uppercase transition-colors
+                   hover:bg-rally-dark"
       >
-        <Camera size={22} /> Spot a Car
+        Spot a Car
       </Link>
     </div>
   )
-}
-
-function getComputedColor(tier: RarityTier): string {
-  const map: Record<RarityTier, string> = {
-    common:    '#6b7280',
-    uncommon:  '#22c55e',
-    rare:      '#3b82f6',
-    epic:      '#a855f7',
-    legendary: '#f59e0b',
-  }
-  return map[tier]
 }

@@ -19,10 +19,10 @@ function AppRoutes() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-zinc-950 flex items-center justify-center">
+      <div className="min-h-screen bg-rally-cream flex items-center justify-center">
         <div className="text-center">
-          <div className="w-8 h-8 border-2 border-blue-400 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
-          <p className="text-zinc-400 text-sm">Loading Cardex…</p>
+          <div className="w-8 h-8 border-2 border-rally-red border-t-transparent animate-spin mx-auto mb-3" />
+          <p className="font-display text-rally-muted text-[10px] tracking-[3px] uppercase">Loading Cardex…</p>
         </div>
       </div>
     )
@@ -30,11 +30,11 @@ function AppRoutes() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-zinc-950 flex items-center justify-center p-4">
+      <div className="min-h-screen bg-rally-cream flex items-center justify-center p-4">
         <div className="max-w-sm text-center">
-          <AlertCircle className="mx-auto mb-3 text-red-400" size={36} />
-          <h1 className="text-lg font-bold mb-2">Setup Required</h1>
-          <p className="text-zinc-400 text-sm whitespace-pre-wrap leading-relaxed">{error}</p>
+          <AlertCircle className="mx-auto mb-3 text-rally-red" size={36} />
+          <h1 className="font-display font-bold text-lg tracking-[3px] uppercase mb-2 text-rally-dark">Setup Required</h1>
+          <p className="font-serif text-rally-muted text-sm whitespace-pre-wrap leading-relaxed">{error}</p>
         </div>
       </div>
     )
