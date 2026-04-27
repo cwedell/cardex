@@ -208,3 +208,7 @@ __marimo__/
 
 # Claude
 .claude/
+
+# Web app build artifacts
+web/node_modules/
+web/dist/
