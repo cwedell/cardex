@@ -293,6 +293,7 @@ def main():
             "scaler": scaler.state_dict(),
             "best_val_acc": best_val_acc,
             "num_classes": num_classes,
+            "classes": train_loader.dataset.classes,  # sorted list, idx i → classes[i]
         }
         save_checkpoint(ckpt_state, args.out_dir / "latest.pt")
         if is_best:
