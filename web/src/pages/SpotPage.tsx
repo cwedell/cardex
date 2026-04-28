@@ -14,7 +14,7 @@ function generateThumbnail(file: File): Promise<string> {
     const img = new Image()
     const url = URL.createObjectURL(file)
     img.onload = () => {
-      const MAX = 300
+      const MAX = 600
       const scale = Math.min(MAX / img.width, MAX / img.height, 1)
       const c = document.createElement('canvas')
       c.width  = Math.round(img.width  * scale)

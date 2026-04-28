@@ -2,8 +2,9 @@ import { useMemo, useState } from 'react'
 import { getSpots, getUser, saveUser } from '../lib/storage'
 import { RarityBadge } from '../components/RarityBadge'
 import { RARITY_ORDER, RARITY_LABEL, RARITY_POINTS } from '../lib/rarity'
-import { Pencil, Check } from 'lucide-react'
-import type { RarityTier } from '../types'
+import { Pencil, Check, Download } from 'lucide-react'
+import { generateTradingCard } from '../lib/tradingCard'
+import type { RarityTier, SpottedCar } from '../types'
 
 const RARITY_COLORS: Record<RarityTier, string> = {
   common:    '#6b7280',
@@ -25,8 +26,16 @@ export function ProfilePage() {
   const user  = getUser()
   const spots = getSpots()
 
-  const [editing, setEditing]     = useState(false)
-  const [nameInput, setNameInput] = useState(user.name)
+  const [editing, setEditing]         = useState(false)
+  const [nameInput, setNameInput]     = useState(user.name)
+  const [cardPreview, setCardPreview] = useState<string | null>(null)
+  const [previewLabel, setPreviewLabel] = useState('')
+
+  async function handleCardDownload(spot: SpottedCar) {
+    const dataUrl = await generateTradingCard(spot, user.name)
+    setPreviewLabel(spot.label)
+    setCardPreview(dataUrl)
+  }
 
   const spottedLabels = useMemo(() => new Set(spots.map(s => s.label)), [spots])
 
@@ -139,6 +148,39 @@ export function ProfilePage() {
         </div>
       </div>
 
+      {/* Trading card preview modal */}
+      {cardPreview && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4"
+          onClick={() => setCardPreview(null)}
+        >
+          <div className="flex flex-col items-center gap-4" onClick={e => e.stopPropagation()}>
+            <img
+              src={cardPreview}
+              alt={previewLabel}
+              className="max-h-[72vh] max-w-full object-contain shadow-2xl"
+            />
+            <div className="flex gap-3">
+              <a
+                href={cardPreview}
+                download={`cardex-${previewLabel.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.jpg`}
+                className="px-6 py-2.5 bg-rally-gold text-rally-cream font-display font-black
+                           text-[10px] tracking-[3px] uppercase hover:bg-rally-muted transition-colors"
+              >
+                Download
+              </a>
+              <button
+                onClick={() => setCardPreview(null)}
+                className="px-6 py-2.5 border border-rally-rule text-rally-muted font-display
+                           text-[10px] tracking-[2px] uppercase hover:text-rally-dark transition-colors"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Spot history */}
       <SectionLabel>Spot History</SectionLabel>
       {spots.length === 0 ? (
@@ -173,6 +215,13 @@ export function ProfilePage() {
                   {new Date(spot.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </p>
               </div>
+              <button
+                onClick={() => handleCardDownload(spot)}
+                title="Generate trading card"
+                className="text-rally-muted hover:text-rally-gold transition-colors flex-shrink-0 ml-1"
+              >
+                <Download size={14} />
+              </button>
             </div>
           ))}
         </div>
