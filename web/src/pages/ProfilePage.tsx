@@ -16,7 +16,7 @@ const RARITY_COLORS: Record<RarityTier, string> = {
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <div className="font-display font-bold text-[9px] tracking-[4px] text-rally-muted uppercase border-b border-rally-rule pb-[7px] mb-4">
+    <div className="font-display font-bold text-[14px] tracking-[4px] text-rally-muted uppercase border-b border-rally-rule pb-[7px] mb-4">
       {children}
     </div>
   )
@@ -103,7 +103,7 @@ export function ProfilePage() {
               </button>
             </div>
           )}
-          <p className="font-display text-[10px] text-rally-muted tracking-[1px] mt-1">Member since {joinDate}</p>
+          <p className="font-display text-[15px] text-rally-muted tracking-[1px] mt-1">Member since {joinDate}</p>
         </div>
       </div>
 
@@ -114,7 +114,7 @@ export function ProfilePage() {
             key={label}
             className={`p-[14px_20px] border-b border-rally-rule text-center ${i < stats.length - 1 ? 'border-r border-rally-rule' : ''}`}
           >
-            <p className="font-display font-bold text-[9px] tracking-[3px] text-rally-muted uppercase mb-1.5">{label}</p>
+            <p className="font-display font-bold text-[14px] tracking-[3px] text-rally-muted uppercase mb-1.5">{label}</p>
             <p className="font-display font-black text-[36px] text-rally-red leading-none" style={{ letterSpacing: '-1px' }}>{value}</p>
           </div>
         ))}
@@ -130,7 +130,7 @@ export function ProfilePage() {
                 className="w-2 h-2 rounded-full flex-shrink-0"
                 style={{ backgroundColor: RARITY_COLORS[tier] }}
               />
-              <span className="font-serif italic text-[13px] w-20">{RARITY_LABEL[tier]}</span>
+              <span className="font-serif italic text-[16px] w-20">{RARITY_LABEL[tier]}</span>
               <div className="flex-1 h-[3px] bg-rally-paper2">
                 <div
                   className="h-full"
@@ -140,7 +140,7 @@ export function ProfilePage() {
                   }}
                 />
               </div>
-              <span className="font-display font-bold text-[10px] text-rally-muted w-6 text-right">
+              <span className="font-display font-bold text-[15px] text-rally-muted w-6 text-right">
                 {tierBreakdown[tier]}
               </span>
             </div>
@@ -165,14 +165,14 @@ export function ProfilePage() {
                 href={cardPreview}
                 download={`cardex-${previewLabel.replace(/[^a-z0-9]/gi, '-').toLowerCase()}.jpg`}
                 className="px-6 py-2.5 bg-rally-gold text-rally-cream font-display font-black
-                           text-[10px] tracking-[3px] uppercase hover:bg-rally-muted transition-colors"
+                           text-[15px] tracking-[3px] uppercase hover:bg-rally-muted transition-colors"
               >
                 Download
               </a>
               <button
                 onClick={() => setCardPreview(null)}
                 className="px-6 py-2.5 border border-rally-rule text-rally-muted font-display
-                           text-[10px] tracking-[2px] uppercase hover:text-rally-dark transition-colors"
+                           text-[15px] tracking-[2px] uppercase hover:text-rally-dark transition-colors"
               >
                 Close
               </button>
@@ -199,19 +199,19 @@ export function ProfilePage() {
                 />
               </div>
               <div className="flex-1 min-w-0">
-                <p className="font-serif italic text-[13px] mb-1 text-rally-dark truncate">{spot.label}</p>
+                <p className="font-serif italic text-[16px] mb-1 text-rally-dark truncate">{spot.label}</p>
                 <div className="flex items-center gap-2">
                   <RarityBadge tier={spot.rarityTier} size="sm" />
-                  <span className="font-display text-[9px] text-rally-muted">
+                  <span className="font-display text-[15px] text-rally-muted">
                     · {Math.round(spot.confidence * 100)}% confidence
                   </span>
                 </div>
               </div>
               <div className="text-right flex-shrink-0">
-                <p className="font-display font-bold text-[10px] text-rally-muted">
+                <p className="font-display font-bold text-[15px] text-rally-muted">
                   {new Date(spot.timestamp).toLocaleDateString()}
                 </p>
-                <p className="font-display text-[9px] text-rally-rule mt-0.5">
+                <p className="font-display text-[14px] text-rally-rule mt-0.5">
                   {new Date(spot.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                 </p>
               </div>

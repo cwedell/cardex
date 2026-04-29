@@ -15,7 +15,7 @@ interface Props {
 }
 
 export function RarityBadge({ tier, size = 'md' }: Props) {
-  const fontSize = size === 'sm' ? '9px' : '10px'
+  const fontSize = size === 'sm' ? '14px' : '15px'
   const dotSize  = size === 'sm' ? 6 : 8
   const color    = RARITY_HEX[tier]
 

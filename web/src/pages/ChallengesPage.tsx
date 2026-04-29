@@ -4,7 +4,7 @@ import type { ActiveChallenge } from '../types'
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
   return (
-    <div className="font-display font-bold text-[9px] tracking-[4px] text-rally-muted uppercase border-b border-rally-rule pb-[7px] mb-4">
+    <div className="font-display font-bold text-[14px] tracking-[4px] text-rally-muted uppercase border-b border-rally-rule pb-[7px] mb-4">
       {children}
     </div>
   )
@@ -32,7 +32,7 @@ function ChallengeCard({
     >
       <div className="flex items-start justify-between gap-3 mb-3">
         <div>
-          <div className="font-display font-bold text-[9px] tracking-[3px] text-rally-muted uppercase mb-1.5">
+          <div className="font-display font-bold text-[14px] tracking-[3px] text-rally-muted uppercase mb-1.5">
             {title}{' '}
             <span className="text-rally-rule ml-1">· resets {period}</span>
           </div>
@@ -53,13 +53,13 @@ function ChallengeCard({
       </div>
 
       <div className="flex justify-between items-center">
-        <span className="font-display text-[10px] text-rally-muted">
+        <span className="font-display text-[15px] text-rally-muted">
           {done
             ? `Completed at ${new Date(challenge.completedAt!).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`
             : `${challenge.progress} / ${target}`
           }
         </span>
-        <span className="font-display font-bold text-[10px] text-rally-gold">
+        <span className="font-display font-bold text-[15px] text-rally-gold">
           +{challenge.points} pts
         </span>
       </div>
@@ -82,13 +82,13 @@ export function ChallengesPage() {
     <div className="max-w-[900px] mx-auto px-12 py-9 font-serif text-rally-dark">
       {/* Header */}
       <div className="mb-7 pb-5 border-b border-rally-rule">
-        <p className="font-display font-bold text-[10px] tracking-[4px] text-rally-muted uppercase mb-[5px]">
+        <p className="font-display font-bold text-[15px] tracking-[4px] text-rally-muted uppercase mb-[5px]">
           Active Objectives
         </p>
         <h1 className="font-serif font-normal italic text-[34px]">Challenges</h1>
         <div className="flex items-center gap-1.5 mt-1.5">
           <Clock size={12} className="text-rally-muted" />
-          <span className="font-display text-[10px] text-rally-muted tracking-[1px]">
+          <span className="font-display text-[15px] text-rally-muted tracking-[1px]">
             Daily resets in {nextMidnight}
           </span>
         </div>
@@ -119,11 +119,11 @@ export function ChallengesPage() {
           <div key={i} className={`flex gap-3 ${i < 2 ? 'mb-3.5' : ''}`}>
             <div
               className="w-[18px] h-[18px] border border-rally-rule flex-shrink-0 flex items-center justify-center
-                         font-display font-bold text-[9px] text-rally-muted mt-0.5"
+                         font-display font-bold text-[14px] text-rally-muted mt-0.5"
             >
               {i + 1}
             </div>
-            <p className="font-serif italic text-[13px] leading-relaxed text-rally-dark">{text}</p>
+            <p className="font-serif italic text-[16px] leading-relaxed text-rally-dark">{text}</p>
           </div>
         ))}
       </div>

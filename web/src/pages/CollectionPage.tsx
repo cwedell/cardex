@@ -27,9 +27,16 @@ function CarSilhouette() {
   )
 }
 
+function splitCardLabel(label: string): { make: string; generation: string } {
+  const m = label.match(/^(.*?)\s*\((.+)\)\s*$/)
+  if (m) return { make: m[1].trim(), generation: m[2].trim().replace(/Generation/gi, 'Gen') }
+  return { make: label, generation: '' }
+}
+
 function CarCard({ label, rarity, photoDataUrl, spotted }: {
   label: string; rarity: RarityTier; photoDataUrl?: string; spotted: boolean
 }) {
+  const { make, generation } = splitCardLabel(label)
   return (
     <div className={`border overflow-hidden transition-opacity
       ${spotted ? 'border-rally-rule bg-rally-paper' : 'border-rally-rule bg-rally-paper opacity-60'}`}>
@@ -43,10 +50,11 @@ function CarCard({ label, rarity, photoDataUrl, spotted }: {
         )}
       </div>
       <div className="p-[10px_12px_12px]">
-        <p className="font-serif italic text-[12px] leading-tight mb-1.5 text-rally-dark"
-           style={{ display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-          {label}
-        </p>
+        <p className="font-serif italic text-[15px] leading-tight text-rally-dark">{make}</p>
+        {generation && (
+          <p className="font-serif italic text-[13px] leading-tight text-rally-muted mb-1.5">{generation}</p>
+        )}
+        {!generation && <div className="mb-1.5" />}
         <RarityBadge tier={rarity} size="sm" />
       </div>
     </div>
@@ -59,7 +67,7 @@ function FilterPill({ label, active, dot, onClick }: {
   return (
     <button
       onClick={onClick}
-      className={`inline-flex items-center gap-1.5 px-3 py-1.5 font-display font-bold text-[10px] tracking-[1.5px] uppercase border transition-colors
+      className={`inline-flex items-center gap-1.5 px-3 py-1.5 font-display font-bold text-[15px] tracking-[1.5px] uppercase border transition-colors
         ${active
           ? 'bg-rally-dark border-rally-dark text-rally-cream'
           : 'bg-rally-paper border-rally-rule text-rally-muted hover:border-rally-muted'
@@ -108,11 +116,11 @@ export function CollectionPage() {
       {/* Header */}
       <div className="flex items-end justify-between mb-[22px] pb-[18px] border-b border-rally-rule">
         <div>
-          <p className="font-display font-bold text-[10px] tracking-[4px] text-rally-muted uppercase mb-[5px]">Your Garage</p>
+          <p className="font-display font-bold text-[15px] tracking-[4px] text-rally-muted uppercase mb-[5px]">Your Garage</p>
           <h1 className="font-serif font-normal italic text-[32px]">Collection</h1>
         </div>
         <div className="text-right">
-          <p className="font-display font-black text-[11px] tracking-[3px] text-rally-muted uppercase">Cars Spotted</p>
+          <p className="font-display font-black text-[16px] tracking-[3px] text-rally-muted uppercase">Cars Spotted</p>
           <p className="font-display font-black text-[40px] text-rally-red leading-none" style={{ letterSpacing: '-1px' }}>
             {spottedCount}{' '}
             <span className="text-[18px] text-rally-muted font-normal" style={{ letterSpacing: 0 }}>/{carData.length}</span>
@@ -129,28 +137,32 @@ export function CollectionPage() {
           value={query}
           onChange={e => setQuery(e.target.value)}
           className="w-full pl-9 pr-4 py-2.5 bg-rally-paper border border-rally-rule
-                     font-serif italic text-[13px] text-rally-dark placeholder-rally-muted
+                     font-serif italic text-[16px] text-rally-dark placeholder-rally-muted
                      focus:outline-none focus:border-rally-red transition-colors"
         />
       </div>
 
       {/* Filter pills */}
-      <div className="flex flex-wrap gap-1.5 mb-4">
-        <FilterPill label="All"       active={filter === 'all'}       onClick={() => setFilter('all')} />
-        <FilterPill label="Spotted"   active={filter === 'spotted'}   onClick={() => setFilter('spotted')} />
-        <FilterPill label="Unspotted" active={filter === 'unspotted'} onClick={() => setFilter('unspotted')} />
-        {RARITY_ORDER.map(tier => (
-          <FilterPill
-            key={tier}
-            label={RARITY_LABEL[tier]}
-            active={filter === tier}
-            dot={RARITY_COLORS[tier]}
-            onClick={() => setFilter(tier)}
-          />
-        ))}
+      <div className="flex flex-col gap-1.5 mb-4">
+        <div className="flex gap-1.5">
+          <FilterPill label="All"       active={filter === 'all'}       onClick={() => setFilter('all')} />
+          <FilterPill label="Spotted"   active={filter === 'spotted'}   onClick={() => setFilter('spotted')} />
+          <FilterPill label="Unspotted" active={filter === 'unspotted'} onClick={() => setFilter('unspotted')} />
+        </div>
+        <div className="flex flex-wrap gap-1.5">
+          {RARITY_ORDER.map(tier => (
+            <FilterPill
+              key={tier}
+              label={RARITY_LABEL[tier]}
+              active={filter === tier}
+              dot={RARITY_COLORS[tier]}
+              onClick={() => setFilter(tier)}
+            />
+          ))}
+        </div>
       </div>
 
-      <p className="font-display text-[9px] tracking-[2px] text-rally-muted uppercase mb-3.5">
+      <p className="font-display text-[14px] tracking-[2px] text-rally-muted uppercase mb-3.5">
         Showing {filtered.length} cars
       </p>
 

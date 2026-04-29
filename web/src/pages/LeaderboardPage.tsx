@@ -45,7 +45,7 @@ function RankRow({ user, rank }: { user: MockUser; rank: number }) {
         {trophyColor ? (
           <TrophyIcon color={trophyColor} />
         ) : (
-          <span className={`font-display font-bold text-[13px] ${user.isMe ? 'text-rally-red' : 'text-rally-muted'}`}>
+          <span className={`font-display font-bold text-[16px] ${user.isMe ? 'text-rally-red' : 'text-rally-muted'}`}>
             {rank}
           </span>
         )}
@@ -55,12 +55,12 @@ function RankRow({ user, rank }: { user: MockUser; rank: number }) {
         <p className="font-serif italic text-[14px] text-rally-dark">
           {user.name}{' '}
           {user.isMe && (
-            <span className="font-display font-bold text-[9px] text-rally-red tracking-[1px] uppercase not-italic">
+            <span className="font-display font-bold text-[14px] text-rally-red tracking-[1px] uppercase not-italic">
               YOU
             </span>
           )}
         </p>
-        <p className="font-display text-[9px] text-rally-muted tracking-[0.5px]">{user.uniqueCars} unique cars</p>
+        <p className="font-display text-[14px] text-rally-muted tracking-[0.5px]">{user.uniqueCars} unique cars</p>
       </div>
       <div className="text-right flex-shrink-0">
         <p
@@ -68,7 +68,7 @@ function RankRow({ user, rank }: { user: MockUser; rank: number }) {
         >
           {user.totalSpots}
         </p>
-        <p className="font-display text-[9px] text-rally-muted tracking-[1px]">spots</p>
+        <p className="font-display text-[14px] text-rally-muted tracking-[1px]">spots</p>
       </div>
     </div>
   )
@@ -89,11 +89,12 @@ export function LeaderboardPage() {
     <div className="max-w-[900px] mx-auto px-12 py-9 font-serif text-rally-dark">
       {/* Header */}
       <div className="mb-7 pb-5 border-b border-rally-rule">
-        <p className="font-display font-bold text-[10px] tracking-[4px] text-rally-muted uppercase mb-[5px]">Community</p>
+        <p className="font-display font-bold text-[15px] tracking-[4px] text-rally-muted uppercase mb-[5px]">Community</p>
         <h1 className="font-serif font-normal italic text-[34px]">Leaderboard</h1>
-        <p className="font-display text-[10px] text-rally-muted mt-1.5 tracking-[0.5px]">
+        <p className="font-display text-[15px] text-rally-muted mt-1.5 tracking-[0.5px]">
           You are ranked #{myRank} · {board.find(u => u.isMe)?.totalSpots ?? 0} spots
         </p>
+
       </div>
 
       {/* Period tabs */}
@@ -102,7 +103,7 @@ export function LeaderboardPage() {
           <button
             key={p}
             onClick={() => setPeriod(p)}
-            className={`py-2 px-5 font-display font-bold text-[10px] tracking-[2px] uppercase transition-colors
+            className={`py-2 px-5 font-display font-bold text-[15px] tracking-[2px] uppercase transition-colors
               ${i < arr.length - 1 ? 'border-r border-rally-rule' : ''}
               ${period === p
                 ? 'bg-rally-dark text-rally-cream'

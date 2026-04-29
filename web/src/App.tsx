@@ -22,7 +22,7 @@ function AppRoutes() {
       <div className="min-h-screen bg-rally-cream flex items-center justify-center">
         <div className="text-center">
           <div className="w-8 h-8 border-2 border-rally-red border-t-transparent animate-spin mx-auto mb-3" />
-          <p className="font-display text-rally-muted text-[10px] tracking-[3px] uppercase">Loading Cardex…</p>
+          <p className="font-display text-rally-muted text-[13px] tracking-[3px] uppercase">Loading Cardex…</p>
         </div>
       </div>
     )

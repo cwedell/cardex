@@ -18,7 +18,7 @@ const RARITY_COLORS: Record<RarityTier, string> = {
 
 function SectionLabel({ children, action }: { children: React.ReactNode; action?: React.ReactNode }) {
   return (
-    <div className="flex justify-between items-center font-display font-bold text-[9px] tracking-[4px] text-rally-muted uppercase border-b border-rally-rule pb-[7px] mb-4">
+    <div className="flex justify-between items-center font-display font-bold text-[14px] tracking-[4px] text-rally-muted uppercase border-b border-rally-rule pb-[7px] mb-4">
       <span>{children}</span>
       {action && <span className="text-rally-red">{action}</span>}
     </div>
@@ -51,8 +51,8 @@ function ChallengeCard({
       style={{ borderTop: `3px solid ${accentColor}` }}
     >
       <div className="flex justify-between items-center mb-2">
-        <span className="font-display font-bold text-[9px] tracking-[3px] text-rally-muted uppercase">{title}</span>
-        <span className={`font-display font-bold text-[10px] ${done ? 'text-rally-gold' : 'text-rally-gold'}`}>
+        <span className="font-display font-bold text-[14px] tracking-[3px] text-rally-muted uppercase">{title}</span>
+        <span className={`font-display font-bold text-[15px] ${done ? 'text-rally-gold' : 'text-rally-gold'}`}>
           {done ? '✓ Complete' : `+${points} pts`}
         </span>
       </div>
@@ -60,7 +60,7 @@ function ChallengeCard({
       <div className="h-[3px] bg-rally-paper2">
         <div className="h-full transition-all" style={{ width: `${pct}%`, backgroundColor: accentColor }} />
       </div>
-      <p className="font-display text-[9px] text-rally-muted tracking-[1px] mt-1.5">{progress} / {target}</p>
+      <p className="font-display text-[14px] text-rally-muted tracking-[1px] mt-1.5">{progress} / {target}</p>
     </div>
   )
 }
@@ -106,7 +106,7 @@ export function DashboardPage() {
       {/* Header */}
       <div className="flex items-end justify-between mb-7 pb-[22px] border-b border-rally-rule">
         <div>
-          <p className="font-display font-bold text-[10px] tracking-[4px] text-rally-muted uppercase mb-1.5">Driver Dashboard</p>
+          <p className="font-display font-bold text-[15px] tracking-[4px] text-rally-muted uppercase mb-1.5">Driver Dashboard</p>
           <h1 className="text-[36px] font-serif font-normal italic leading-tight">
             Welcome back,<br />
             <span
@@ -121,7 +121,7 @@ export function DashboardPage() {
           <p className="font-display font-black text-[64px] text-rally-dark leading-none" style={{ letterSpacing: '-2px' }}>
             {spottedLabels.size}
           </p>
-          <p className="font-display font-bold text-[9px] text-rally-muted tracking-[2px] uppercase">
+          <p className="font-display font-bold text-[15px] text-rally-muted tracking-[2px] uppercase">
             of {totalCars} spotted
           </p>
         </div>
@@ -134,7 +134,7 @@ export function DashboardPage() {
             key={label}
             className={`p-[14px_20px] border-b border-rally-rule ${i < stats.length - 1 ? 'border-r border-rally-rule' : ''}`}
           >
-            <p className="font-display font-bold text-[9px] tracking-[3px] text-rally-muted uppercase mb-1.5">{label}</p>
+            <p className="font-display font-bold text-[14px] tracking-[3px] text-rally-muted uppercase mb-1.5">{label}</p>
             <p className="font-display font-black text-[44px] text-rally-red leading-none" style={{ letterSpacing: '-1px' }}>{value}</p>
           </div>
         ))}
@@ -153,14 +153,14 @@ export function DashboardPage() {
                   className="w-2 h-2 rounded-full flex-shrink-0"
                   style={{ backgroundColor: RARITY_COLORS[tier] }}
                 />
-                <span className="font-serif italic text-[13px] w-20">{RARITY_LABEL[tier]}</span>
+                <span className="font-serif italic text-[16px] w-20">{RARITY_LABEL[tier]}</span>
                 <div className="flex-1 h-[3px] bg-rally-paper2">
                   <div
                     className="h-full"
                     style={{ width: `${pct}%`, backgroundColor: RARITY_COLORS[tier] }}
                   />
                 </div>
-                <span className="font-display font-bold text-[10px] text-rally-muted text-right" style={{ minWidth: 44 }}>
+                <span className="font-display font-bold text-[15px] text-rally-muted text-right" style={{ minWidth: 44 }}>
                   {spotted}/{total}
                 </span>
               </div>
@@ -212,7 +212,7 @@ export function DashboardPage() {
                   <p className="font-serif italic text-sm truncate">{spot.label}</p>
                   <RarityBadge tier={spot.rarityTier} size="sm" />
                 </div>
-                <span className="font-display text-[9px] text-rally-muted flex-shrink-0 tracking-[1px]">
+                <span className="font-display text-[14px] text-rally-muted flex-shrink-0 tracking-[1px]">
                   {new Date(spot.timestamp).toLocaleDateString()}
                 </span>
               </div>
@@ -225,7 +225,7 @@ export function DashboardPage() {
       <Link
         to="/spot"
         className="flex items-center justify-center w-full py-[15px] bg-rally-red text-rally-cream
-                   font-display font-black text-[11px] tracking-[5px] uppercase transition-colors
+                   font-display font-black text-[16px] tracking-[5px] uppercase transition-colors
                    hover:bg-rally-dark"
       >
         Spot a Car

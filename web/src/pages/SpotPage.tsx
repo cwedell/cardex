@@ -39,13 +39,13 @@ function UnrecognizedModal({ onClose }: { onClose: () => void }) {
         </p>
         <button
           onClick={onClose}
-          className="w-full py-3 bg-rally-gold text-rally-cream font-display font-black text-[10px] tracking-[3px] uppercase transition-colors hover:bg-rally-muted"
+          className="w-full py-3 bg-rally-gold text-rally-cream font-display font-black text-[15px] tracking-[3px] uppercase transition-colors hover:bg-rally-muted"
         >
           Add to Training Data
         </button>
         <button
           onClick={onClose}
-          className="mt-2 w-full py-2 font-display text-[10px] text-rally-muted hover:text-rally-dark tracking-[2px] uppercase transition-colors"
+          className="mt-2 w-full py-2 font-display text-[15px] text-rally-muted hover:text-rally-dark tracking-[2px] uppercase transition-colors"
         >
           Dismiss
         </button>
@@ -67,12 +67,12 @@ function ResultCard({ label, rarity, confidence, isFirstSpot, photoDataUrl, onSp
   return (
     <div className="border border-rally-rule bg-rally-paper p-5 animate-slide-up">
       {isFirstSpot ? (
-        <div className="flex items-center gap-2 text-rally-gold font-display font-bold text-[9px] tracking-[1.5px] uppercase mb-3">
+        <div className="flex items-center gap-2 text-rally-gold font-display font-bold text-[14px] tracking-[1.5px] uppercase mb-3">
           <CheckCircle2 size={14} />
           First spot! Added to your collection.
         </div>
       ) : (
-        <div className="flex items-center gap-2 text-rally-muted font-display font-bold text-[9px] tracking-[1.5px] uppercase mb-3">
+        <div className="flex items-center gap-2 text-rally-muted font-display font-bold text-[14px] tracking-[1.5px] uppercase mb-3">
           <CheckCircle2 size={14} className="text-rally-gold" />
           Spotted again — logged to history.
         </div>
@@ -87,10 +87,10 @@ function ResultCard({ label, rarity, confidence, isFirstSpot, photoDataUrl, onSp
         <div className="flex flex-col justify-center min-w-0">
           <RarityBadge tier={rarity} size="sm" />
           <h2 className="font-serif italic text-lg mt-1 leading-snug text-rally-dark">{label}</h2>
-          <p className="font-display text-rally-muted text-[10px] tracking-[1px] mt-1">
+          <p className="font-display text-rally-muted text-[15px] tracking-[1px] mt-1">
             {Math.round(confidence * 100)}% confidence
           </p>
-          <p className="font-display font-bold text-[9px] text-rally-gold tracking-[2px] uppercase mt-0.5">
+          <p className="font-display font-bold text-[14px] text-rally-gold tracking-[2px] uppercase mt-0.5">
             +{RARITY_POINTS[rarity]} pts
           </p>
         </div>
@@ -99,7 +99,7 @@ function ResultCard({ label, rarity, confidence, isFirstSpot, photoDataUrl, onSp
       <button
         onClick={onSpotAnother}
         className="mt-4 w-full py-3 bg-rally-paper2 hover:bg-rally-rule border border-rally-rule
-                   font-display font-bold text-[10px] tracking-[3px] uppercase text-rally-muted
+                   font-display font-bold text-[15px] tracking-[3px] uppercase text-rally-muted
                    transition-colors flex items-center justify-center gap-2"
       >
         <RefreshCw size={14} /> Spot Another
@@ -197,11 +197,12 @@ export function SpotPage() {
     <div className="max-w-[900px] mx-auto px-12 py-9 font-serif text-rally-dark">
       {/* Header */}
       <div className="mb-7 pb-5 border-b border-rally-rule">
-        <p className="font-display font-bold text-[10px] tracking-[4px] text-rally-muted uppercase mb-1.5">Log Entry</p>
+        <p className="font-display font-bold text-[15px] tracking-[4px] text-rally-muted uppercase mb-1.5">Log Entry</p>
         <h1 className="font-serif font-normal italic text-[34px]">Spot a Car</h1>
-        <p className="font-display text-[11px] text-rally-muted mt-1.5 tracking-[0.5px]">
+        <p className="font-display text-[16px] text-rally-muted mt-1.5 tracking-[0.5px]">
           {modelReady ? 'Upload a photo to identify and log it.' : 'Loading model…'}
         </p>
+
       </div>
 
       {/* Upload zone */}
@@ -228,7 +229,7 @@ export function SpotPage() {
             {phase === 'inferring' ? (
               <>
                 <RefreshCw size={32} className="text-rally-red animate-spin" />
-                <p className="font-display font-bold text-[11px] tracking-[2px] uppercase text-rally-dark">Identifying…</p>
+                <p className="font-display font-bold text-[16px] tracking-[2px] uppercase text-rally-dark">Identifying…</p>
               </>
             ) : (
               !previewUrl && (
@@ -237,10 +238,10 @@ export function SpotPage() {
                     <Camera size={28} className="text-rally-muted" />
                     <Upload size={28} className="text-rally-muted" />
                   </div>
-                  <p className="font-display font-bold text-[12px] tracking-[2px] text-rally-dark uppercase">
+                  <p className="font-display font-bold text-[15px] tracking-[2px] text-rally-dark uppercase">
                     {modelReady ? 'Tap to upload or drag a photo here' : 'Loading model…'}
                   </p>
-                  <p className="font-display text-[10px] text-rally-muted tracking-[1px]">JPG, PNG, WEBP</p>
+                  <p className="font-display text-[15px] text-rally-muted tracking-[1px]">JPG, PNG, WEBP</p>
                 </>
               )
             )}
@@ -259,7 +260,7 @@ export function SpotPage() {
       />
 
       {phase !== 'result' && (
-        <p className="font-display text-[10px] text-rally-muted text-center tracking-[1px]">
+        <p className="font-display text-[15px] text-rally-muted text-center tracking-[1px]">
           Your photo will be analysed to identify the make, model &amp; generation.
         </p>
       )}

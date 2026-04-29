@@ -24,7 +24,7 @@ function DesktopNavLink({ to, label }: { to: string; label: string }) {
       to={to}
       end={to === '/'}
       className={({ isActive }) =>
-        `font-display font-bold text-[10px] tracking-[2.5px] uppercase px-3.5 transition-colors
+        `font-display font-bold text-[15px] tracking-[2.5px] uppercase px-3.5 transition-colors
          ${isActive ? 'text-rally-red' : 'text-rally-muted hover:text-rally-cream'}`
       }
     >
@@ -44,7 +44,7 @@ function MobileNavLink({ to, label, Icon }: { to: string; label: string; Icon: L
       }
     >
       <Icon size={20} />
-      <span className="text-[9px] font-display font-bold tracking-[2px] uppercase">{label}</span>
+      <span className="text-[14px] font-display font-bold tracking-[2px] uppercase">{label}</span>
     </NavLink>
   )
 }
@@ -55,7 +55,7 @@ export function Layout() {
       {/* Top bar */}
       <header className="sticky top-0 z-30">
         <nav className="bg-rally-dark flex items-center px-8 h-[52px]">
-          <span className="font-display font-black text-[18px] text-rally-cream tracking-[6px] uppercase mr-auto">
+          <span className="font-display font-black text-[24px] text-rally-cream tracking-[6px] uppercase mr-auto">
             CARDEX
           </span>
           <div className="flex items-center">
