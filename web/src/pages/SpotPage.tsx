@@ -253,7 +253,6 @@ export function SpotPage() {
         ref={fileInputRef}
         type="file"
         accept="image/*"
-        capture="environment"
         className="hidden"
         onChange={handleFileChange}
         disabled={!modelReady || phase === 'inferring'}

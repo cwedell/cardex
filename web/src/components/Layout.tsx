@@ -39,12 +39,12 @@ function MobileNavLink({ to, label, Icon }: { to: string; label: string; Icon: L
       to={to}
       end={to === '/'}
       className={({ isActive }) =>
-        `flex flex-col items-center gap-0.5 px-2 py-2 transition-colors
+        `flex flex-col items-center gap-0.5 px-1 py-2 transition-colors
          ${isActive ? 'text-rally-red' : 'text-rally-muted hover:text-rally-cream'}`
       }
     >
       <Icon size={20} />
-      <span className="text-[14px] font-display font-bold tracking-[2px] uppercase">{label}</span>
+      <span className="text-[10px] font-display font-bold tracking-[1px] uppercase">{label}</span>
     </NavLink>
   )
 }
@@ -58,7 +58,7 @@ export function Layout() {
           <span className="font-display font-black text-[24px] text-rally-cream tracking-[6px] uppercase mr-auto">
             CARDEX
           </span>
-          <div className="flex items-center">
+          <div className="hidden md:flex items-center">
             {NAV_ITEMS.map(item => (
               <DesktopNavLink key={item.to} to={item.to} label={item.label} />
             ))}
